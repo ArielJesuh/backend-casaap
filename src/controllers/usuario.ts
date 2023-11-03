@@ -14,7 +14,7 @@ export const getUsuario = async (req:Request,res:Response) => {
     const usuario = await Usuario.findByPk(id);
 
     if(usuario){
-        res.json(usuario)
+        return res.json(usuario)
     } else {
         res.status(404).json({
             msg: `No existe el usuario de id:  ${id}`
@@ -40,6 +40,7 @@ export const deleteUsuario = async (req:Request,res:Response) => {
         res.json({
             msg: "usuario eleminado!"
         })
+        return;
     }
     res.json({
         msg:'delete  Usuario', 
@@ -49,7 +50,7 @@ export const deleteUsuario = async (req:Request,res:Response) => {
 
 
 export const postUsuario = async (req:Request,res:Response) => {
-    const {nombre_usuario, contrasena} = req.body;
+    const {nombre_usuario, contrasena, email, run, telefono, tipo} = req.body;
 
     const usuario = await Usuario.findOne({where: {nombre_usuario: nombre_usuario}})
 
@@ -63,10 +64,10 @@ export const postUsuario = async (req:Request,res:Response) => {
             await Usuario.create({
                 nombre_usuario:nombre_usuario,
                 contrasena:hashedPass,
-                email:"",
-                run:"",
-                telefono:0,
-                tipo:0
+                email:email,
+                run:run,
+                telefono:telefono,
+                tipo:tipo
             });
             res.json({
                 msg:`Usuario ${nombre_usuario} agregado!`

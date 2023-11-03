@@ -25,7 +25,7 @@ const getUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     const { id } = req.params;
     const usuario = yield usuario_1.default.findByPk(id);
     if (usuario) {
-        res.json(usuario);
+        return res.json(usuario);
     }
     else {
         res.status(404).json({
@@ -51,6 +51,7 @@ const deleteUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         res.json({
             msg: "usuario eleminado!"
         });
+        return;
     }
     res.json({
         msg: 'delete  Usuario',
@@ -59,7 +60,7 @@ const deleteUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* 
 });
 exports.deleteUsuario = deleteUsuario;
 const postUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { nombre_usuario, contrasena } = req.body;
+    const { nombre_usuario, contrasena, email, run, telefono, tipo } = req.body;
     const usuario = yield usuario_1.default.findOne({ where: { nombre_usuario: nombre_usuario } });
     if (usuario) {
         res.status(400).json({
@@ -72,10 +73,10 @@ const postUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             yield usuario_1.default.create({
                 nombre_usuario: nombre_usuario,
                 contrasena: hashedPass,
-                email: "",
-                run: "",
-                telefono: 0,
-                tipo: 0
+                email: email,
+                run: run,
+                telefono: telefono,
+                tipo: tipo
             });
             res.json({
                 msg: `Usuario ${nombre_usuario} agregado!`

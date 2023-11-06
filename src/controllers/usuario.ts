@@ -15,15 +15,13 @@ export const getUsuario = async (req:Request,res:Response) => {
 
     if(usuario){
         res.json(usuario)
+        return
     } else {
         res.status(404).json({
             msg: `No existe el usuario de id:  ${id}`
         })
+        return
     }
-    res.json({
-        msg:'get Usuario',
-        id:id
-    })
 }
 
 
@@ -35,16 +33,16 @@ export const deleteUsuario = async (req:Request,res:Response) => {
         res.status(404).json({
             msg: `No existe el usuario de id:  ${id}`
         })
+        return
     } else {
         await usuario.destroy();
         res.json({
             msg: "usuario eleminado!"
         })
+        return
+
     }
-    res.json({
-        msg:'delete  Usuario', 
-        id:id
-    })
+
 }
 
 

@@ -26,16 +26,14 @@ const getUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     const usuario = yield usuario_1.default.findByPk(id);
     if (usuario) {
         res.json(usuario);
+        return;
     }
     else {
         res.status(404).json({
             msg: `No existe el usuario de id:  ${id}`
         });
+        return;
     }
-    res.json({
-        msg: 'get Usuario',
-        id: id
-    });
 });
 exports.getUsuario = getUsuario;
 const deleteUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -45,17 +43,15 @@ const deleteUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         res.status(404).json({
             msg: `No existe el usuario de id:  ${id}`
         });
+        return;
     }
     else {
         yield usuario.destroy();
         res.json({
             msg: "usuario eleminado!"
         });
+        return;
     }
-    res.json({
-        msg: 'delete  Usuario',
-        id: id
-    });
 });
 exports.deleteUsuario = deleteUsuario;
 const postUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {

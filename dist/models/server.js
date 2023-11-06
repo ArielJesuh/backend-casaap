@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const usuario_1 = __importDefault(require("../routes/usuario"));
+const filtro_1 = __importDefault(require("../routes/filtro"));
 const connection_1 = __importDefault(require("../db/connection"));
 const cors_1 = __importDefault(require("cors"));
 class Server {
@@ -37,6 +38,7 @@ class Server {
             });
         });
         this.app.use('/api/usuarios', usuario_1.default);
+        this.app.use('/api/filtros', filtro_1.default);
     }
     //funcion para paresar body
     middlewares() {

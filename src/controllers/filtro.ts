@@ -1,27 +1,30 @@
-import express, { Request, Response} from 'express';
+import express, { Request, Response } from 'express';
 import Filtro from '../models/filtro';
+import Usuario from '../models/usuario';
 
+export const getFiltroByUsuario = async (req: Request, res: Response) => {
+    const { id_user } = req.params;
 
-export const getFiltroByUsuario = async (req:Request,res:Response) => {
-    const {id_user} = req.params; 
-    const filtro = await Filtro.findOne({where: {usuario_id_usuario: id_user}})
+    try {
+        const filtro = await Filtro.findOne({ where: { usuario_id_usuario: id_user } });
 
-    if(filtro){
-        res.json(filtro)
-    } else {
-        res.status(404).json({
-            msg: `Este usuario no tiene un filtro guardado`
-        })
+        if (filtro) {
+            res.json(filtro);
+        } else {
+            res.status(404).json({
+                msg: `Este usuario no tiene un filtro guardado`
+            });
+        }
+    } catch (error) {
+        res.status(500).json({
+            msg: 'Error en la consulta de filtros'
+        });
     }
-    res.json({
-        msg:'get Filtro',
-        id:id_user
-    })
 }
 
 export const deleteFiltro = async (req:Request,res:Response) => {
     const {id} = req.params; 
-    const filtro = await Filtro.findByPk({where: {id}})
+    const filtro = await Filtro.findByPk(id)
 
     if(!filtro){
         res.status(404).json({
@@ -33,40 +36,46 @@ export const deleteFiltro = async (req:Request,res:Response) => {
             msg: "Filtro eleminado!"
         })
     }
-    res.json({
-        msg:'delete  Filtro', 
-        id:id
-    })
 }
 
 
-export const postFiltro = async (req:Request,res:Response) => {
-    const {cantidad_habitaciones, cantidad_banos, max_valor, min_valor, comuna_id, usuario_id} = req.body;
+export const postFiltro = async (req: Request, res: Response) => {
+    const { cantidad_habitaciones, cantidad_banos, max_valor, min_valor, comuna_id, usuario_id } = req.body;
 
-    const filtro = await Filtro.findOne({where: {usuario_id_usuario: usuario_id}})
+    if (usuario_id === undefined) {
+        res.status(400).json({
+            msg: 'El campo usuario_id es obligatorio en el cuerpo de la solicitud.',
+            body: req.body
+        });
+        return;
+    }
 
-    if(filtro){
-        await filtro.update(req.body);
-        res.json({
-            msg: 'Filtro actualizado'
-        })
+    const usuario = await Usuario.findByPk(usuario_id);
+    if (!usuario) {
+        res.status(404).json({
+            msg: `No existe el usuario de id: ${usuario_id}`
+        });
     } else {
-        try{    
-            await Filtro.create({
-                cantidad_habitaciones: cantidad_habitaciones,
-                cantidad_banos: cantidad_banos,
-                max_valor: max_valor,
-                min_valor: min_valor,
-                comuna_id: comuna_id,
-                usuario_id: usuario_id
-            });
+        const filtro = await Filtro.findOne({ where: { usuario_id_usuario: usuario_id } });
+
+        if (filtro) {
+            await filtro.update(req.body);
             res.json({
-                msg:`Filtro agregado`
-            })} catch(error) {
-                console.log(error)
+                msg: 'Filtro actualizado'
+            });
+        } else {
+            try {
+                await Filtro.create(req.body);
                 res.json({
-                msg:'A ocurrido un error!'
-        })
+                    msg: `Filtro agregado`
+                });
+            } catch (error) {
+                console.log(error);
+                res.json({
+                    msg: 'A ocurrido un error!',
+                    body: req.body
+                });
+            }
         }
     }
 }

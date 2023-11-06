@@ -14,26 +14,30 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.postFiltro = exports.deleteFiltro = exports.getFiltroByUsuario = void 0;
 const filtro_1 = __importDefault(require("../models/filtro"));
+const usuario_1 = __importDefault(require("../models/usuario"));
 const getFiltroByUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id_user } = req.params;
-    const filtro = yield filtro_1.default.findOne({ where: { usuario_id_usuario: id_user } });
-    if (filtro) {
-        res.json(filtro);
+    try {
+        const filtro = yield filtro_1.default.findOne({ where: { usuario_id_usuario: id_user } });
+        if (filtro) {
+            res.json(filtro);
+        }
+        else {
+            res.status(404).json({
+                msg: `Este usuario no tiene un filtro guardado`
+            });
+        }
     }
-    else {
-        res.status(404).json({
-            msg: `Este usuario no tiene un filtro guardado`
+    catch (error) {
+        res.status(500).json({
+            msg: 'Error en la consulta de filtros'
         });
     }
-    res.json({
-        msg: 'get Filtro',
-        id: id_user
-    });
 });
 exports.getFiltroByUsuario = getFiltroByUsuario;
 const deleteFiltro = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const filtro = yield filtro_1.default.findByPk({ where: { id } });
+    const filtro = yield filtro_1.default.findByPk(id);
     if (!filtro) {
         res.status(404).json({
             msg: `No existe el filtro de id:  ${id}`
@@ -45,40 +49,45 @@ const deleteFiltro = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             msg: "Filtro eleminado!"
         });
     }
-    res.json({
-        msg: 'delete  Filtro',
-        id: id
-    });
 });
 exports.deleteFiltro = deleteFiltro;
 const postFiltro = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { cantidad_habitaciones, cantidad_banos, max_valor, min_valor, comuna_id, usuario_id } = req.body;
-    const filtro = yield filtro_1.default.findOne({ where: { usuario_id_usuario: usuario_id } });
-    if (filtro) {
-        yield filtro.update(req.body);
-        res.json({
-            msg: 'Filtro actualizado'
+    if (usuario_id === undefined) {
+        res.status(400).json({
+            msg: 'El campo usuario_id es obligatorio en el cuerpo de la solicitud.',
+            body: req.body
+        });
+        return;
+    }
+    const usuario = yield usuario_1.default.findByPk(usuario_id);
+    if (!usuario) {
+        res.status(404).json({
+            msg: `No existe el usuario de id: ${usuario_id}`
         });
     }
     else {
-        try {
-            yield filtro_1.default.create({
-                cantidad_habitaciones: cantidad_habitaciones,
-                cantidad_banos: cantidad_banos,
-                max_valor: max_valor,
-                min_valor: min_valor,
-                comuna_id: comuna_id,
-                usuario_id: usuario_id
-            });
+        const filtro = yield filtro_1.default.findOne({ where: { usuario_id_usuario: usuario_id } });
+        if (filtro) {
+            yield filtro.update(req.body);
             res.json({
-                msg: `Filtro agregado`
+                msg: 'Filtro actualizado'
             });
         }
-        catch (error) {
-            console.log(error);
-            res.json({
-                msg: 'A ocurrido un error!'
-            });
+        else {
+            try {
+                yield filtro_1.default.create(req.body);
+                res.json({
+                    msg: `Filtro agregado`
+                });
+            }
+            catch (error) {
+                console.log(error);
+                res.json({
+                    msg: 'A ocurrido un error!',
+                    body: req.body
+                });
+            }
         }
     }
 });

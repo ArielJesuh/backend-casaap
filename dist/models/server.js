@@ -15,12 +15,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const usuario_1 = __importDefault(require("../routes/usuario"));
 const filtro_1 = __importDefault(require("../routes/filtro"));
+const comuna_1 = __importDefault(require("../routes/comuna"));
 const connection_1 = __importDefault(require("../db/connection"));
 const cors_1 = __importDefault(require("cors"));
 class Server {
     constructor() {
         this.app = (0, express_1.default)();
-        this.port = process.env.PORT || '3001';
+        this.port = process.env.PORT || '3000';
         this.listen();
         this.middlewares();
         this.routes();
@@ -39,6 +40,7 @@ class Server {
         });
         this.app.use('/api/usuarios', usuario_1.default);
         this.app.use('/api/filtros', filtro_1.default);
+        this.app.use('/api/comunas', comuna_1.default);
     }
     //funcion para paresar body
     middlewares() {

@@ -95,7 +95,8 @@ const updateUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     const { id } = req.params;
     const { body } = req;
     try {
-        const usuario = yield usuario_1.default.findByPk(id);
+        var usuario = yield usuario_1.default.findByPk(id);
+        usuario.contrasena = yield bcrypt_1.default.hash(usuario.contrasena, 10);
         if (usuario) {
             yield usuario.update(body);
             res.json({
@@ -136,6 +137,7 @@ const loginUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     //Generacion de token
     const token = jsonwebtoken_1.default.sign({
         nombre_usuario: nombre_usuario,
+        tipo: usuario.tipo
     }, process.env.SECRET_KEY || 'PASS123');
     res.json(token);
 });

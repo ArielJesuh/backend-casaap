@@ -2,6 +2,8 @@ import express, { Request, Response} from 'express';
 import Usuario from '../models/usuario';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+
+
 export const getUsuarios = async (req:Request,res:Response) => {
 
     const listUsuarios = await Usuario.findAll()
@@ -86,7 +88,8 @@ export const updateUsuario = async (req:Request,res:Response) => {
     const {id} = req.params; 
     const {body} = req;
     try{
-        const usuario = await Usuario.findByPk(id);
+        var usuario = await Usuario.findByPk(id);
+        usuario.contrasena =  await bcrypt.hash(usuario.contrasena,10);
         if(usuario){
             await usuario.update(body);
             res.json({
@@ -125,6 +128,8 @@ export const loginUsuario = async (req:Request, res: Response) => {
     //Generacion de token
     const token = jwt.sign({
         nombre_usuario: nombre_usuario,
+        tipo:usuario.tipo
+
 
     },process.env.SECRET_KEY || 'PASS123' );
     res.json(token);

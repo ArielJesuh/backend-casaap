@@ -16,6 +16,7 @@ const express_1 = __importDefault(require("express"));
 const usuario_1 = __importDefault(require("../routes/usuario"));
 const filtro_1 = __importDefault(require("../routes/filtro"));
 const comuna_1 = __importDefault(require("../routes/comuna"));
+const vivienda_1 = __importDefault(require("../routes/vivienda"));
 const connection_1 = __importDefault(require("../db/connection"));
 const cors_1 = __importDefault(require("cors"));
 class Server {
@@ -41,6 +42,7 @@ class Server {
         this.app.use('/api/usuarios', usuario_1.default);
         this.app.use('/api/filtros', filtro_1.default);
         this.app.use('/api/comunas', comuna_1.default);
+        this.app.use('/api/viviendas', vivienda_1.default);
     }
     //funcion para paresar body
     middlewares() {

@@ -40,9 +40,9 @@ export const deleteFiltro = async (req:Request,res:Response) => {
 
 
 export const postFiltro = async (req: Request, res: Response) => {
-    const { cantidad_habitaciones, cantidad_banos, max_valor, min_valor, comuna_id, usuario_id } = req.body;
+    const { cantidad_habitaciones, cantidad_banos, max_valor, min_valor, comuna_id_comuna, usuario_id_usuario } = req.body;
 
-    if (usuario_id === undefined) {
+    if (usuario_id_usuario === undefined) {
         res.status(400).json({
             msg: 'El campo usuario_id es obligatorio en el cuerpo de la solicitud.',
             body: req.body
@@ -50,13 +50,13 @@ export const postFiltro = async (req: Request, res: Response) => {
         return;
     }
 
-    const usuario = await Usuario.findByPk(usuario_id);
+    const usuario = await Usuario.findByPk(usuario_id_usuario);
     if (!usuario) {
         res.status(404).json({
-            msg: `No existe el usuario de id: ${usuario_id}`
+            msg: `No existe el usuario de id: ${usuario_id_usuario}`
         });
     } else {
-        const filtro = await Filtro.findOne({ where: { usuario_id_usuario: usuario_id } });
+        const filtro = await Filtro.findOne({ where: { usuario_id_usuario: usuario_id_usuario } });
 
         if (filtro) {
             await filtro.update(req.body);

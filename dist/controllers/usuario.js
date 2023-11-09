@@ -137,7 +137,8 @@ const loginUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     //Generacion de token
     const token = jsonwebtoken_1.default.sign({
         nombre_usuario: nombre_usuario,
-        tipo: usuario.tipo
+        tipo: usuario.tipo,
+        id: usuario.id
     }, process.env.SECRET_KEY || 'PASS123');
     res.json(token);
 });

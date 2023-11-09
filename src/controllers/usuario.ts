@@ -128,7 +128,8 @@ export const loginUsuario = async (req:Request, res: Response) => {
     //Generacion de token
     const token = jwt.sign({
         nombre_usuario: nombre_usuario,
-        tipo:usuario.tipo
+        tipo:usuario.tipo,
+        id: usuario.id
 
 
     },process.env.SECRET_KEY || 'PASS123' );

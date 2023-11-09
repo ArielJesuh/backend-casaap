@@ -52,22 +52,22 @@ const deleteFiltro = (req, res) => __awaiter(void 0, void 0, void 0, function* (
 });
 exports.deleteFiltro = deleteFiltro;
 const postFiltro = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { cantidad_habitaciones, cantidad_banos, max_valor, min_valor, comuna_id, usuario_id } = req.body;
-    if (usuario_id === undefined) {
+    const { cantidad_habitaciones, cantidad_banos, max_valor, min_valor, comuna_id_comuna, usuario_id_usuario } = req.body;
+    if (usuario_id_usuario === undefined) {
         res.status(400).json({
             msg: 'El campo usuario_id es obligatorio en el cuerpo de la solicitud.',
             body: req.body
         });
         return;
     }
-    const usuario = yield usuario_1.default.findByPk(usuario_id);
+    const usuario = yield usuario_1.default.findByPk(usuario_id_usuario);
     if (!usuario) {
         res.status(404).json({
-            msg: `No existe el usuario de id: ${usuario_id}`
+            msg: `No existe el usuario de id: ${usuario_id_usuario}`
         });
     }
     else {
-        const filtro = yield filtro_1.default.findOne({ where: { usuario_id_usuario: usuario_id } });
+        const filtro = yield filtro_1.default.findOne({ where: { usuario_id_usuario: usuario_id_usuario } });
         if (filtro) {
             yield filtro.update(req.body);
             res.json({

@@ -6,6 +6,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const connection_1 = __importDefault(require("../db/connection"));
 const sequelize_1 = require("sequelize");
 const Vivienda = connection_1.default.define('vivienda', {
+    id: {
+        type: sequelize_1.DataTypes.INTEGER,
+        primaryKey: true,
+    },
     direccion: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
@@ -25,6 +29,10 @@ const Vivienda = connection_1.default.define('vivienda', {
     descripcion: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
+    },
+    url_imagen: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: true,
     },
     comuna_id_comuna: {
         type: sequelize_1.DataTypes.INTEGER,

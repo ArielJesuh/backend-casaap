@@ -14,10 +14,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getViviendas = exports.getVivienda = void 0;
 const vivienda_1 = __importDefault(require("../models/vivienda"));
+const comuna_1 = __importDefault(require("../models/comuna"));
 const getVivienda = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     try {
-        const vivienda = yield vivienda_1.default.findByPk(id);
+        const vivienda = yield vivienda_1.default.findByPk(id, {
+            include: [{
+                    model: comuna_1.default,
+                    as: 'comuna'
+                }]
+        });
         if (vivienda) {
             return res.json(vivienda);
         }
@@ -36,7 +42,14 @@ const getVivienda = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 exports.getVivienda = getVivienda;
 const getViviendas = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const listViviendas = yield vivienda_1.default.findAll();
+        const listViviendas = yield vivienda_1.default.findAll({
+            include: [
+                {
+                    model: comuna_1.default,
+                    as: 'comuna',
+                }
+            ]
+        });
         res.json(listViviendas);
     }
     catch (error) {

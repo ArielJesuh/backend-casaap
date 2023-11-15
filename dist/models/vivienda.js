@@ -10,6 +10,10 @@ const Vivienda = connection_1.default.define('vivienda', {
         type: sequelize_1.DataTypes.INTEGER,
         primaryKey: true,
     },
+    titulo: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false,
+    },
     direccion: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
@@ -25,10 +29,6 @@ const Vivienda = connection_1.default.define('vivienda', {
     },
     valor_uf: {
         type: sequelize_1.DataTypes.INTEGER,
-    },
-    descripcion: {
-        type: sequelize_1.DataTypes.STRING,
-        allowNull: false,
     },
     url_imagen: {
         type: sequelize_1.DataTypes.STRING,

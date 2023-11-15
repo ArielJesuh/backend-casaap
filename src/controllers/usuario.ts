@@ -86,12 +86,13 @@ export const postUsuario = async (req:Request,res:Response) => {
 
 export const updateUsuario = async (req:Request,res:Response) => {
     const {id} = req.params; 
-    const {body} = req;
+    var {body} = req;
+    body.contrasena = await bcrypt.hash(body.contrasena,10);
     try{
         var usuario = await Usuario.findByPk(id);
-        usuario.contrasena =  await bcrypt.hash(usuario.contrasena,10);
         if(usuario){
             await usuario.update(body);
+            usuario.update(usuario);
             res.json({
                 msg:'Usuario actualizado'
             })

@@ -93,12 +93,13 @@ const postUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 exports.postUsuario = postUsuario;
 const updateUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const { body } = req;
+    var { body } = req;
+    body.contrasena = yield bcrypt_1.default.hash(body.contrasena, 10);
     try {
         var usuario = yield usuario_1.default.findByPk(id);
-        usuario.contrasena = yield bcrypt_1.default.hash(usuario.contrasena, 10);
         if (usuario) {
             yield usuario.update(body);
+            usuario.update(usuario);
             res.json({
                 msg: 'Usuario actualizado'
             });

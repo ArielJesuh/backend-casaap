@@ -78,6 +78,7 @@ const postUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                 telefono: telefono,
                 tipo: tipo
             });
+            console.log(req);
             res.json({
                 msg: `Usuario ${nombre_usuario} agregado!`
             });

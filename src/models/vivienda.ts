@@ -6,6 +6,10 @@ const Vivienda = db.define('vivienda',{
         type: DataTypes.INTEGER,
         primaryKey: true,
       },
+      descripcion: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
       titulo: {
         type: DataTypes.STRING,
         allowNull: false,

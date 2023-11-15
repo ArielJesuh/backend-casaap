@@ -60,6 +60,7 @@ export const postUsuario = async (req:Request,res:Response) => {
         res.status(400).json({
             msg: `Usuario ${nombre_usuario} ya existe!`
         })
+
     } else {
         const hashedPass = await bcrypt.hash(contrasena,10);
         try{    
@@ -71,6 +72,7 @@ export const postUsuario = async (req:Request,res:Response) => {
                 telefono:telefono,
                 tipo:tipo
             });
+            console.log(req)
             res.json({
                 msg:`Usuario ${nombre_usuario} agregado!`
             })} catch(error) {

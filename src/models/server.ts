@@ -3,6 +3,7 @@ import routesUsuario from '../routes/usuario'
 import routesFiltro from '../routes/filtro'
 import routesComuna from '../routes/comuna'
 import routesViviendas from '../routes/vivienda'
+import routesRegiones from '../routes/region'
 import db from '../db/connection'
 import cors from 'cors'
 class Server{
@@ -34,6 +35,7 @@ class Server{
         this.app.use('/api/filtros',routesFiltro)
         this.app.use('/api/comunas',routesComuna)
         this.app.use('/api/viviendas',routesViviendas)
+        this.app.use('/api/regiones',routesRegiones)
     }
 //funcion para paresar body
     middlewares(){

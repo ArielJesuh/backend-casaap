@@ -12,9 +12,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateVivienda = exports.deleteVivienda = exports.getViviendas = exports.postVivienda = exports.getVivienda = void 0;
+exports.updateVivienda = exports.deleteVivienda = exports.getViviendas = exports.postVivienda = exports.getViviendaInmo = exports.getVivienda = void 0;
 const vivienda_1 = __importDefault(require("../models/vivienda"));
 const comuna_1 = __importDefault(require("../models/comuna"));
+const inmobiliario_1 = __importDefault(require("../models/inmobiliario"));
 const getVivienda = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     try {
@@ -40,6 +41,32 @@ const getVivienda = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.getVivienda = getVivienda;
+const getViviendaInmo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    try {
+        const inmobiliario = yield inmobiliario_1.default.findOne({ where: { usuario_id_usuario: id } });
+        const vivienda = yield vivienda_1.default.findAll({ where: { inmobiliario_id_inmobiliario: inmobiliario.id } }, {
+            include: [{
+                    model: comuna_1.default,
+                    as: 'comuna'
+                }]
+        });
+        if (vivienda) {
+            return res.json(vivienda);
+        }
+        else {
+            res.status(404).json({
+                msg: `No existe la Vivienda con id inmobiliaria${id}`
+            });
+        }
+    }
+    catch (error) {
+        res.status(500).json({
+            msg: 'Error en la consulta de viviendas'
+        });
+    }
+});
+exports.getViviendaInmo = getViviendaInmo;
 const postVivienda = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { titulo, descripcion, direccion, cantidad_habitaciones, cantidad_banos, metros_cuadrados, valor_uf, url_imagen, comuna_id_comuna, inmobiliario_id_inmobiliario } = req.body;
     console.log(req.body);

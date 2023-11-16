@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import Vivienda from '../models/vivienda';
 import Comuna from '../models/comuna';
+import Inmobiliario from '../models/inmobiliario';
 
 
 export const getVivienda = async (req: Request, res: Response) => {
@@ -12,7 +13,6 @@ export const getVivienda = async (req: Request, res: Response) => {
                 as: 'comuna'
             }]
         });
-
         if (vivienda) {
             return res.json(vivienda);
         } else {
@@ -27,6 +27,30 @@ export const getVivienda = async (req: Request, res: Response) => {
     }
 }
 
+export const getViviendaInmo = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    try {
+        const inmobiliario = await Inmobiliario.findOne({where:{usuario_id_usuario: id}})
+
+        const vivienda = await Vivienda.findAll({where: {inmobiliario_id_inmobiliario: inmobiliario.id}}, {
+            include: [{
+                model: Comuna,
+                as: 'comuna'
+            }]
+        });
+        if (vivienda) {
+            return res.json(vivienda);
+        } else {
+            res.status(404).json({
+                msg: `No existe la Vivienda con id inmobiliaria${id}`
+            });
+        }
+    } catch (error) {
+        res.status(500).json({
+            msg: 'Error en la consulta de viviendas'
+        });
+    }
+}
 
 export const postVivienda = async (req:Request,res:Response) => {
     const {titulo ,descripcion, direccion, cantidad_habitaciones, cantidad_banos, metros_cuadrados, valor_uf, url_imagen, comuna_id_comuna , inmobiliario_id_inmobiliario} = req.body;

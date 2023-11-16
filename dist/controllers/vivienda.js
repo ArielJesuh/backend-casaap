@@ -45,11 +45,10 @@ exports.getVivienda = getVivienda;
 const getViviendaInmo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     try {
-        const inmobiliario = yield inmobiliario_1.default.findOne({ where: { usuario_id_usuario: id } });
-        const vivienda = yield vivienda_1.default.findAll({ where: { inmobiliario_id_inmobiliario: inmobiliario.id } }, {
+        const vivienda = yield vivienda_1.default.findByPk(id, {
             include: [{
-                    model: comuna_1.default,
-                    as: 'comuna'
+                    model: inmobiliario_1.default,
+                    as: 'inmobiliario'
                 }]
         });
         if (vivienda) {

@@ -31,12 +31,11 @@ export const getVivienda = async (req: Request, res: Response) => {
 export const getViviendaInmo = async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
-        const inmobiliario = await Inmobiliario.findOne({where:{usuario_id_usuario: id}})
 
-        const vivienda = await Vivienda.findAll({where: {inmobiliario_id_inmobiliario: inmobiliario.id}}, {
+        const vivienda = await Vivienda.findByPk(id, {
             include: [{
-                model: Comuna,
-                as: 'comuna'
+                model: Inmobiliario,
+                as: 'inmobiliario'
             }]
         });
         if (vivienda) {

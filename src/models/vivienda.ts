@@ -1,5 +1,6 @@
 import db from '../db/connection';
 import { DataTypes } from 'sequelize';
+import Inmobiliario from './inmobiliario';
 
 const Vivienda = db.define('vivienda',{
     id: {
@@ -14,7 +15,7 @@ const Vivienda = db.define('vivienda',{
         type: DataTypes.STRING,
         allowNull: false,
       },
-    direccion: {
+      direccion: {
         type: DataTypes.STRING,
         allowNull: false,
       },
@@ -43,4 +44,5 @@ const Vivienda = db.define('vivienda',{
         createdAt: false,
         updatedAt: false
     });
+
 export default Vivienda;

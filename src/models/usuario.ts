@@ -1,7 +1,12 @@
 import db from '../db/connection';
 import { DataTypes } from 'sequelize';
+import Inmobiliario from './inmobiliario';
 
 const Usuario = db.define('usuario',{
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+      },
     nombre_usuario: {
         type : DataTypes.STRING,
         unique:true,
@@ -27,5 +32,15 @@ const Usuario = db.define('usuario',{
         createdAt: false,
         updatedAt: false
     });
+
+Usuario.hasMany(Inmobiliario, {
+    foreignKey: 'usuario_id_usuario',
+    sourceKey: 'id'
+})    
+
+Inmobiliario.belongsTo(Usuario, {
+    foreignKey: 'usuario_id_usuario',
+    sourceKey: 'id'
+})    
 
 export default Usuario;

@@ -1,6 +1,8 @@
 import express, { Request, Response } from 'express';
 import Vivienda from '../models/vivienda';
 import Comuna from '../models/comuna';
+import Inmobiliario from '../models/inmobiliario';
+import Usuario from '../models/usuario';
 
 
 export const getVivienda = async (req: Request, res: Response) => {

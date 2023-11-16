@@ -12,10 +12,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateVivienda = exports.deleteVivienda = exports.getViviendas = exports.postVivienda = exports.getViviendaInmo = exports.getVivienda = void 0;
+exports.updateVivienda = exports.deleteVivienda = exports.getViviendas = exports.postVivienda = exports.getViviendasFav = exports.getViviendaInmo = exports.getVivienda = void 0;
 const vivienda_1 = __importDefault(require("../models/vivienda"));
 const comuna_1 = __importDefault(require("../models/comuna"));
 const inmobiliario_1 = __importDefault(require("../models/inmobiliario"));
+const favorita_1 = __importDefault(require("../models/favorita"));
 const getVivienda = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     try {
@@ -67,6 +68,38 @@ const getViviendaInmo = (req, res) => __awaiter(void 0, void 0, void 0, function
     }
 });
 exports.getViviendaInmo = getViviendaInmo;
+const getViviendasFav = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    try {
+        // Obtener las viviendas favoritas del usuario
+        const favoritas = yield favorita_1.default.findAll({ where: { usuario_id_usuario: id } });
+        // Extraer los ids de las viviendas favoritas
+        const viviendaIds = favoritas.map((fav) => fav.vivienda_id_vivienda);
+        // Buscar todas las viviendas con esos ids
+        const viviendas = yield vivienda_1.default.findAll({
+            where: { id: viviendaIds },
+            include: [{
+                    model: comuna_1.default,
+                    as: 'comuna'
+                }]
+        });
+        if (viviendas.length > 0) {
+            return res.json(viviendas);
+        }
+        else {
+            res.status(404).json({
+                msg: `No existen viviendas favoritas para el usuario con id ${id}`
+            });
+        }
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({
+            msg: 'Error en la consulta de viviendas'
+        });
+    }
+});
+exports.getViviendasFav = getViviendasFav;
 const postVivienda = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { titulo, descripcion, direccion, cantidad_habitaciones, cantidad_banos, metros_cuadrados, valor_uf, url_imagen, comuna_id_comuna, inmobiliario_id_inmobiliario } = req.body;
     console.log(req.body);

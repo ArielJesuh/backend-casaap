@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import Vivienda from '../models/vivienda';
 import Comuna from '../models/comuna';
 import Inmobiliario from '../models/inmobiliario';
+import Favorita from '../models/favorita';
 
 
 export const getVivienda = async (req: Request, res: Response) => {
@@ -51,6 +52,41 @@ export const getViviendaInmo = async (req: Request, res: Response) => {
         });
     }
 }
+
+export const getViviendasFav = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    try {
+        // Obtener las viviendas favoritas del usuario
+        const favoritas = await Favorita.findAll({ where: { usuario_id_usuario: id } });
+
+        // Extraer los ids de las viviendas favoritas
+        const viviendaIds = favoritas.map((fav: any) => fav.vivienda_id_vivienda);
+
+        // Buscar todas las viviendas con esos ids
+        const viviendas = await Vivienda.findAll({
+            where: { id: viviendaIds },
+            include: [{
+                model: Comuna,
+                as: 'comuna'
+            }]
+        });
+
+        if (viviendas.length > 0) {
+            return res.json(viviendas);
+        } else {
+            res.status(404).json({
+                msg: `No existen viviendas favoritas para el usuario con id ${id}`
+            });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            msg: 'Error en la consulta de viviendas'
+        });
+    }
+};
+
+
 
 export const postVivienda = async (req:Request,res:Response) => {
     const {titulo ,descripcion, direccion, cantidad_habitaciones, cantidad_banos, metros_cuadrados, valor_uf, url_imagen, comuna_id_comuna , inmobiliario_id_inmobiliario} = req.body;

@@ -16,20 +16,33 @@ exports.deleteFavorita = exports.postFavorita = void 0;
 const favorita_1 = __importDefault(require("../models/favorita"));
 const postFavorita = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { usuario_id_usuario, vivienda_id_vivienda } = req.body;
-    try {
-        yield favorita_1.default.create({
+    const favoritaExist = yield favorita_1.default.findOne({
+        where: {
             usuario_id_usuario: usuario_id_usuario,
             vivienda_id_vivienda: vivienda_id_vivienda
-        });
-        console.log(req);
-        res.json({
-            msg: `Vivienda agregada a favoritas!`
-        });
+        }
+    });
+    if (!favoritaExist) {
+        try {
+            yield favorita_1.default.create({
+                usuario_id_usuario: usuario_id_usuario,
+                vivienda_id_vivienda: vivienda_id_vivienda
+            });
+            console.log(req);
+            res.json({
+                msg: `Vivienda agregada a favoritas!`
+            });
+        }
+        catch (error) {
+            console.log(error);
+            res.json({
+                msg: 'A ocurrido un error!'
+            });
+        }
     }
-    catch (error) {
-        console.log(error);
-        res.json({
-            msg: 'A ocurrido un error!'
+    else {
+        res.status(500).json({
+            msg: 'Error en la consulta de comunas'
         });
     }
 });

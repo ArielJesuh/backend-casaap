@@ -3,20 +3,31 @@ import Favorita from '../models/favorita';
 
 export const postFavorita = async (req:Request,res:Response) => {
     const {usuario_id_usuario , vivienda_id_vivienda} = req.body;
-
-        try{    
-            await Favorita.create({
-                usuario_id_usuario: usuario_id_usuario,
-                vivienda_id_vivienda: vivienda_id_vivienda
-            });
-            console.log(req)
-            res.json({
-                msg:`Vivienda agregada a favoritas!`
-            })} catch(error) {
-                console.log(error)
+    const favoritaExist = await Favorita.findOne({
+        where: {
+          usuario_id_usuario: usuario_id_usuario,
+          vivienda_id_vivienda: vivienda_id_vivienda
+        }
+      });
+      if(!favoritaExist){
+            try{    
+                await Favorita.create({
+                    usuario_id_usuario: usuario_id_usuario,
+                    vivienda_id_vivienda: vivienda_id_vivienda
+                });
+                console.log(req)
                 res.json({
-                msg:'A ocurrido un error!'
-        })
+                    msg:`Vivienda agregada a favoritas!`
+                })} catch(error) {
+                    console.log(error)
+                    res.json({
+                    msg:'A ocurrido un error!'
+            })
+        }
+    } else {
+        res.status(500).json({
+            msg: 'Error en la consulta de comunas'
+        });
     }
 }
 

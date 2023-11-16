@@ -36,12 +36,7 @@ const getComuna = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.getComuna = getComuna;
 const getComunas = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { id } = req.params;
-        const listComunas = yield comuna_1.default.findAll({
-            where: {
-                region_id_region: id
-            }
-        });
+        const listComunas = yield comuna_1.default.findAll();
         res.json(listComunas);
     }
     catch (error) {

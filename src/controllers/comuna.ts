@@ -21,7 +21,12 @@ export const getComuna = async (req: Request, res: Response) => {
 
 export const getComunas = async (req: Request, res: Response) => {
     try {
-        const listComunas = await Comuna.findAll();
+        const { id } = req.params;
+        const listComunas = await Comuna.findAll({
+            where: {
+                region_id_region: id
+            }
+        });
         res.json(listComunas);
     } catch (error) {
         res.status(500).json({

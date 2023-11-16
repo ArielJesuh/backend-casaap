@@ -12,14 +12,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getComunas = exports.getComuna = void 0;
-const comuna_1 = __importDefault(require("../models/comuna"));
-const getComuna = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.getRegiones = exports.getRegion = void 0;
+const region_1 = __importDefault(require("../models/region"));
+const getRegion = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     try {
-        const comuna = yield comuna_1.default.findByPk(id);
-        if (comuna) {
-            return res.json(comuna); // Enviar la comuna encontrada como respuesta
+        const region = yield region_1.default.findByPk(id);
+        if (region) {
+            return res.json(region);
         }
         else {
             res.status(404).json({
@@ -33,16 +33,11 @@ const getComuna = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         });
     }
 });
-exports.getComuna = getComuna;
-const getComunas = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.getRegion = getRegion;
+const getRegiones = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { id } = req.params;
-        const listComunas = yield comuna_1.default.findAll({
-            where: {
-                region_id_region: id
-            }
-        });
-        res.json(listComunas);
+        const listRegions = yield region_1.default.findAll();
+        res.json(listRegions);
     }
     catch (error) {
         res.status(500).json({
@@ -50,4 +45,4 @@ const getComunas = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         });
     }
 });
-exports.getComunas = getComunas;
+exports.getRegiones = getRegiones;

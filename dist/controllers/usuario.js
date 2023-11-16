@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.loginUsuario = exports.updateUsuario = exports.postUsuario = exports.deleteUsuario = exports.getUsuario = exports.getUsuarios = void 0;
+exports.getUsuarioRecover = exports.loginUsuario = exports.updateUsuario = exports.postUsuario = exports.deleteUsuario = exports.getUsuario = exports.getUsuarios = void 0;
 const usuario_1 = __importDefault(require("../models/usuario"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
@@ -145,3 +145,22 @@ const loginUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     res.json(token);
 });
 exports.loginUsuario = loginUsuario;
+const getUsuarioRecover = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const nombre_usuario = req.params.nombre_usuario;
+    const run = req.params.run;
+    const usuario = yield usuario_1.default.findOne({ where: { nombre_usuario: nombre_usuario, run: run } });
+    if (usuario) {
+        return res.json(usuario);
+    }
+    else {
+        res.status(404).json({
+            msg: `No existe el usuario de nombre:  ${nombre_usuario} y run ${run}`
+        });
+        return;
+    }
+    res.json({
+        msg: 'get Usuario',
+        usuario
+    });
+});
+exports.getUsuarioRecover = getUsuarioRecover;

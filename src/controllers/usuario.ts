@@ -139,3 +139,22 @@ export const loginUsuario = async (req:Request, res: Response) => {
     res.json(token);
 
 }
+
+export const getUsuarioRecover = async(req:Request, res:Response) => {
+    const nombre_usuario = req.params.nombre_usuario;
+    const run = req.params.run;
+    const usuario = await Usuario.findOne({where: {nombre_usuario :nombre_usuario ,run:run}});
+
+    if(usuario){
+        return res.json(usuario)
+    } else {
+        res.status(404).json({
+            msg: `No existe el usuario de nombre:  ${nombre_usuario} y run ${run}`
+        })
+        return;
+    }
+    res.json({
+        msg:'get Usuario',
+        usuario
+    })
+}

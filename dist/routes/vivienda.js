@@ -5,4 +5,7 @@ const vivienda_1 = require("../controllers/vivienda");
 const router = (0, express_1.Router)();
 router.get('/:id', vivienda_1.getVivienda);
 router.get('/', vivienda_1.getViviendas);
+router.post('/', vivienda_1.postVivienda);
+router.delete('/:id', vivienda_1.deleteVivienda);
+router.put('/:id', vivienda_1.updateVivienda);
 exports.default = router;
